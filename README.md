@@ -1,9 +1,12 @@
 
+
+# Retrieving and analyzing news from the Guardian
+
+By Dr. Sofia Gil-Clavel
+
   -   [Introduction](#introduction)
   -   [Itinerary](#itinerary)
   -   [Requirements](#requirements)
-
-# Retrieving and analyzing news from the Guardian
 
 ## Introduction
 
