@@ -1,9 +1,11 @@
 
-
+  -   [Introduction](#introduction)
   -   [Itinerary](#itinerary)
   -   [Requirements](#requirements)
 
 # Retrieving and analyzing news from the Guardian
+
+## Introduction
 
 In this edition of Bytes & Bites, Dr. Sofia Gil-Clavel [webpage](https://sofiag1l.github.io/) 
 (researcher and manager of the Societal Analytics Lab [link](https://societal-analytics.nl/)) 
@@ -14,7 +16,7 @@ as well as how to analyze it.
 
 **Where:** Check the "Vrije Universiteit Amsterdam events & workshops" [page](https://libcal.vu.nl/event/4521460).
 
-# Itinerary
+## Itinerary
 
 During the session you will learn the following:
 
@@ -28,7 +30,7 @@ During the session you will learn the following:
   - How to visualize the results using “ggplot2” and “ggraph”.
 
 
-# Requirements
+## Requirements
 
 Participants need to:
 
