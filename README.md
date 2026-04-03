@@ -1,15 +1,9 @@
 
----
-title: "Retrieving and analyzing news from the Guardian"
-date: 2026-04-03
-author: Sofia Gil-Clavel
----
-
 
   -   [Itinerary](#itinerary)
   -   [Requirements](#requirements)
 
-
+# Retrieving and analyzing news from the Guardian
 
 In this edition of Bytes & Bites, Dr. Sofia Gil-Clavel [webpage](https://sofiag1l.github.io/) 
 (researcher and manager of the Societal Analytics Lab [link](https://societal-analytics.nl/)) 
