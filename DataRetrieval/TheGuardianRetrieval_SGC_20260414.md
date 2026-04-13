@@ -1,0 +1,139 @@
+-   [Data retrieval](#data-retrieval)
+    -   [Accessing data via an API](#accessing-data-via-an-api)
+        -   [Using the package `httr2`](#using-the-package-httr2)
+    -   [Scraping data from URLs using the R package
+        “paperboy”.](#scraping-data-from-urls-using-the-r-package-paperboy.)
+    -   [Saving your results](#saving-your-results)
+-   [Now, let’s have a 10-mins break!](#now-lets-have-a-10-mins-break)
+
+# Data retrieval
+
+In this section of the tutorial, you will learn how to download data
+from the Guardian. The assumption is that you already requested and
+obtained your developer The Guardian key. You should have done it
+through this link: <https://open-platform.theguardian.com/access/>.
+
+This part of the tutorial uses the packages:
+
+-   tidyverse
+-   httr2
+-   paperboy
+
+So, before starting please make sure that you have already installed
+them.
+
+Now, let’s load the packages into R:
+
+    library(tidyverse)
+    library(httr2)
+    library(paperboy)
+
+## Accessing data via an API
+
+In general, an Application Programming Interface (API) is used for
+computer programs to communicate with each other. This part of the
+tutorial is based on [Use APIs to source your data in
+R](https://raw.githack.com/Delft-RCafe/resources/main/themes/apis_in_r/apis-in-r.html)
+2023 by Bjørn Bartholdy & Aleksandra Wilczynska.
+
+The most commonly use API type is the Representational State Transfer
+(REST). The REST API uses the HTTP protocol to send and receive
+standardized responses to a server.
+
+There are five HTTP methods that you can use when making an API request
+to a server:
+
+-   **GET**: Retrieves data.
+-   **POST**: Creates a new record.
+-   **PUT**: Modifies or replaces an entire record.
+-   **PATCH**: Modifies or updates parts of a record.
+-   **DELETE**: Deletes an entire record.
+
+Besides those methods, the other important components are:
+
+-   **HTTP method**: Explains what action you will perform.
+-   **endpoint**: The URL to find the resource you are trying to reach
+    on the internet.
+-   **headers**: Provides information relevant both for us and for the
+    server. Such as your The Guardian key!
+-   **body**: These are specific parameters that the server requires.
+
+### Using the package `httr2`
+
+The package `httr2` can be used together with the `tidyverse` package.
+
+The **endpoint** to access The Guardian news is
+<https://content.guardianapis.com/search>. We are going to save this URL
+in a variable called `req`:
+
+    req<-request("https://content.guardianapis.com/search")
+
+Now, we need to:
+
+1.  Set the HTTP method to **GET**. This is done with the function
+    `req_method()`.
+2.  Pass our The Guardian credentials via the **header** using the
+    function `req_headers()`. Please go ahead and replace the variable
+    `KEY` with your own key.
+3.  Pass other parameters through the **body** via `req_url_query()`.
+    The other parameters are:
+
+-   **Query:** For the query, you can check the possible format here
+    <https://open-platform.theguardian.com/documentation/>.
+-   **Other parameters**: You can find a list of the parameters here
+    <https://open-platform.theguardian.com/documentation/search>.
+
+<!-- -->
+
+    query="(artificial intelligence) OR (chat-gpt) OR (open AND ai)"
+
+    resp <- req |>
+      req_method("GET") |> # request method
+      req_headers("Accept" = "application/json",
+                  "api-key" = KEY) %>%
+      req_url_query("q" = query,
+                    "from-date" = "2010-01-01",
+                    "to-date" = "2015-01-01")%>%
+      req_perform()
+
+If you explore the variable `resp`, you will see that it is very long
+string. To be able to read it, we will first turn it into JSON format:
+
+    json_response <- resp_body_string(resp)
+
+As this data is precious, we will now save the JSON to our computer. We
+will do this with the function `write_josn()` from the R package
+`jsonlite`. This package is part of the base R packages, so in theory
+you do not need to download it.
+
+    jsonlite::write_json(json_response, "TheGuardianAI.json")
+
+Now, we can turn the `json` format into a data frame using the function
+`fromJSON()` from the same package. Let’s also turn this data frame into
+a tibble:
+
+    resp_df <- jsonlite::fromJSON(json_response, flatten = TRUE)
+
+    TheGuardianAI<-tibble(resp_df$response$results)
+
+## Scraping data from URLs using the R package “paperboy”.
+
+To scrape the text from The Guardian sites, we will use the package
+`paperboy`. For this, we will use the function `pb_deliver()`:
+
+    TheGuardianAI_txt<-pb_deliver(TheGuardianAI$webUrl)
+
+If you would like to know how `paperboy` works, you can check the
+following publication:
+
+-   Gruber, Johannes B. “Paperboy — A Collection of News Media Scrapers
+    in R.” Preprint, SocArXiv, June 23, 2025.
+    <https://doi.org/10.31235/osf.io/hu6qw_v1>.
+
+## Saving your results
+
+Now, we can save your text as a tibble:
+
+    save(TheGuardianAI_txt,file = "TheGuardianAI.RData")
+
+# Now, let’s have a 10-mins break!

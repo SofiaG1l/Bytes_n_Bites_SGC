@@ -2,7 +2,9 @@
 title: "Analyzing news from the Guardian"
 author: "Sofia Gil-Clavel"
 date: "2026-04-13"
-output: html_document
+output: 
+  md_document:
+    toc: TRUE
 ---
 
 ```{r setup, include=FALSE}
